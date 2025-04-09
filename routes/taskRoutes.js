@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
  * @swagger
  * /api/task:
  *   post:
- *     summary: Add new task
+ *     summary: Add new task with date and time
  *     tags: [Task]
  *     requestBody:
  *       required: true
@@ -37,6 +37,8 @@ router.get('/', async (req, res) => {
  *               - taskType
  *               - taskSubject
  *               - taskDescription
+ *               - taskDate
+ *               - taskTime
  *             properties:
  *               taskType:
  *                 type: string
@@ -44,18 +46,24 @@ router.get('/', async (req, res) => {
  *                 type: string
  *               taskDescription:
  *                 type: string
+ *               taskDate:
+ *                 type: string
+ *               taskTime:
+ *                 type: string
  *     responses:
  *       201:
  *         description: Task created successfully
  */
 router.post('/', async (req, res) => {
     try {
-        const { taskType, taskSubject, taskDescription } = req.body;
+        const { taskType, taskSubject, taskDescription, taskDate, taskTime } = req.body;
 
         const newTask = new Task({
             taskType,
             taskSubject,
             taskDescription,
+            taskDate,
+            taskTime
         });
 
         await newTask.save();

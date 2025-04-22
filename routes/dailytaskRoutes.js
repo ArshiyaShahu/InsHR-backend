@@ -56,4 +56,48 @@ router.post('/', async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /api/dailytask:
+ *   get:
+ *     summary: Get All Daily Tasks
+ *     tags: [DailyTask]
+ *     responses:
+ *       200:
+ *         description: List of all daily tasks
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                   company_id:
+ *                     type: string
+ *                   employee_id:
+ *                     type: number
+ *                   task_type:
+ *                     type: string
+ *                   task_subject:
+ *                     type: string
+ *                   task_description:
+ *                     type: string
+ *                   createdAt:
+ *                     type: string
+ *                   updatedAt:
+ *                     type: string
+ *       500:
+ *         description: Server error
+ */
+router.get('/', async (req, res) => {
+    try {
+        const tasks = await DailyTask.find();
+        res.status(200).json(tasks);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 module.exports = router;

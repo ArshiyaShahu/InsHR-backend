@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const CheckInCheckOut = require('../models/checkincheckout');
+const checkincheckout = require('../models/checkincheckout');
 
 const router = express.Router();
 
@@ -8,7 +8,7 @@ const router = express.Router();
  * @swagger
  * /api/checkincheckout:
  *   post:
- *     summary: Create Check-In Check-Out Entry
+ *     summary: Create a new Check-In/Check-Out record
  *     tags: [Check-In Check-Out]
  *     requestBody:
  *       required: true
@@ -19,48 +19,60 @@ const router = express.Router();
  *             required:
  *               - company_id
  *               - employee_id
+ *               - employee_name
  *               - checkin_time
- *               - checkout_time
+ *               - checkin_latitudes
+ *               - checkin_longitudes
  *             properties:
  *               company_id:
- *                 type: string
+ *                 type: number
  *               employee_id:
  *                 type: number
+ *               employee_name:
+ *                 type: string
  *               checkin_time:
  *                 type: string
- *                 format: date-time
  *               checkout_time:
  *                 type: string
- *                 format: date-time
- *               location:
+ *               checkin_latitudes:
  *                 type: string
- *               remark:
+ *               checkin_longitudes:
+ *                 type: string
+ *               checkout_latitudes:
+ *                 type: string
+ *               checkout_longitudes:
+ *                 type: string
+ *               break:
+ *                 type: string
+ *               late:
+ *                 type: string
+ *                 enum: [Yes, No]
+ *               Production_hours:
  *                 type: string
  *     responses:
- *       200:
- *         description: Check-In Check-Out Entry Created Successfully
+ *       201:
+ *         description: Check-In/Check-Out record created successfully
  *       400:
- *         description: Invalid Data
+ *         description: Invalid input
  */
-
 router.post('/', async (req, res) => {
     try {
         const { company_id } = req.body;
 
+        // Validate company
         const companyExists = await mongoose.connection.db.collection('companies').findOne({ company_id });
 
         if (!companyExists) {
             return res.status(400).json({ message: "Invalid Company ID" });
         }
 
-        const checkData = new CheckInCheckOut(req.body);
-        const savedData = await checkData.save();
+        const newRecord = new checkincheckout(req.body);
+        const savedRecord = await newRecord.save();
 
-        res.status(200).json({
-            message: "Check-In Check-Out Entry Created Successfully",
-            data: savedData
+        res.status(201).json({
+            message: "Check-In/Check-Out record created successfully",
+            data: savedRecord
         });
-
     } catch (error) {
         res.status(400).json({ message: error.message });
     }

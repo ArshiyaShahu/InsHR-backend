@@ -63,4 +63,54 @@ router.post('/', async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /api/leave:
+ *   get:
+ *     summary: Get All Leave Requests
+ *     tags: [Leave]
+ *     responses:
+ *       200:
+ *         description: List of all leave requests
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                   employee_id:
+ *                     type: number
+ *                   company_id:
+ *                     type: string
+ *                   leave_type:
+ *                     type: string
+ *                   start_date:
+ *                     type: string
+ *                   end_date:
+ *                     type: string
+ *                   no_days:
+ *                     type: number
+ *                   reason:
+ *                     type: string
+ *                   request_date:
+ *                     type: string
+ *                   half_day:
+ *                     type: boolean
+ *                   status:
+ *                     type: string
+ *       500:
+ *         description: Server Error
+ */
+router.get('/', async (req, res) => {
+    try {
+        const leaves = await Leave.find();
+        res.status(200).json(leaves);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 module.exports = router;

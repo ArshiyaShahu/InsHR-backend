@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-const CheckInCheckOutSchema = new mongoose.Schema({
+const checkincheckoutschema = new Schema({
     company_id: {
         type: String,
         required: true
@@ -9,20 +10,49 @@ const CheckInCheckOutSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    checkin_time: {
+    employee_name: {
+        type: String,
+        required: true
+    },
+    date: {
         type: Date,
+        required: true,
+        default: Date.now
+    },
+    checkin_time: {
+        type: String,
         required: true
     },
     checkout_time: {
-        type: Date,
+        type: String
+    },
+    checkin_latitudes: {
+        type: String,
         required: true
     },
-    location: {
+    checkin_longitudes: {
+        type: String,
+        required: true
+    },
+    checkout_latitudes: {
         type: String
     },
-    remark: {
+    checkout_longitudes: {
+        type: String
+    },
+    break: {
+        type: String
+    },
+    late: {
+        type: String,
+        enum: ["Yes", "No"],
+        default: "No"
+    },
+    Production_hours: {
         type: String
     }
-}, { timestamps: true });
+}, {
+    timestamps: true
+});
 
-module.exports = mongoose.model('CheckInCheckOut', CheckInCheckOutSchema);
+module.exports = mongoose.model("checkincheckout", checkincheckoutschema);

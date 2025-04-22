@@ -13,7 +13,7 @@ const salarySchema = new mongoose.Schema({
     employee_payment_mode: {
         type: String,
         required: true,
-        enum: ['Bank Transfer', 'Cash', 'UPI', 'Cheque', 'Other'],
+        enum: ['Bank Account', 'Cash','Cheque', 'Other'],
         trim: true
     },
     request_amount: {
@@ -40,7 +40,7 @@ const salarySchema = new mongoose.Schema({
     },
     owner_payment_mode: {
         type: String,
-        enum: ['Bank Transfer', 'Cash', 'UPI', 'Cheque', 'Other'],
+        enum: ['Bank Account', 'Cash','Cheque', 'Other'],
         trim: true
     },
     owner_accepted_date: {

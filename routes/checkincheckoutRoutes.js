@@ -6,7 +6,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/checkincheckout:
+ * /v1/api/checkincheckout:
  *   post:
  *     summary: Create a new Check-In/Check-Out record
  *     tags: [Check-In Check-Out]
@@ -25,7 +25,7 @@ const router = express.Router();
  *               - checkin_longitudes
  *             properties:
  *               company_id:
- *                 type: number
+ *                 type: string
  *               employee_id:
  *                 type: number
  *               employee_name:
@@ -42,7 +42,9 @@ const router = express.Router();
  *                 type: string
  *               checkout_longitudes:
  *                 type: string
- *               break:
+ *               break_in:
+ *                 type: string
+ *               break_out:
  *                 type: string
  *               late:
  *                 type: string
@@ -66,6 +68,7 @@ router.post('/', async (req, res) => {
             return res.status(400).json({ message: "Invalid Company ID" });
         }
 
+        // Create and save the new record
         const newRecord = new checkincheckout(req.body);
         const savedRecord = await newRecord.save();
 

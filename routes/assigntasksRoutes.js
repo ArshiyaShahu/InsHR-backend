@@ -5,7 +5,7 @@ const AssignTask = require('../models/assigntask');
 
 /**
  * @swagger
- * /api/assigntasks/updatestatusbyemployee/{employee_id}:
+ * /v1/api/assigntasks/updatestatusbyemployee/{employee_id}:
  *   patch:
  *     summary: Update task status by employee_id
  *     tags: [Assign Tasks]

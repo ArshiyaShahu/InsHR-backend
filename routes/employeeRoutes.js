@@ -14,7 +14,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/employee:
+ * /v1/api/employee:
  *   post:
  *     summary: Create a new Employee
  *     tags: [Employee]

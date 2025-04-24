@@ -40,7 +40,10 @@ const checkincheckoutschema = new Schema({
     checkout_longitudes: {
         type: String
     },
-    break: {
+    break_in: {  
+        type: String
+    },
+    break_out: {
         type: String
     },
     late: {

@@ -10,6 +10,7 @@ const salaryRoutes = require('./routes/salaryRoutes');
 const checkincheckoutRoutes = require('./routes/checkincheckoutRoutes');
 const attendanceRoutes = require('./routes/attendanceRoutes');
 const assignTaskRoutes = require('./routes/assigntasksRoutes');
+const punchRoutes = require('./routes/punchRoutes');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./swagger');
 
@@ -21,14 +22,15 @@ app.use(bodyParser.json());
 require('./config/db');
 
 // Routes
-app.use('/api/company', companyRoute);
-app.use('/api/employee', employeeRoute);
-app.use('/api/leave', leaveRoutes);
-app.use('/api/dailytask', DailyTaskRoutes);
-app.use('/api/salary', salaryRoutes);
-app.use('/api/checkincheckout', checkincheckoutRoutes);
-app.use('/api/attendance', attendanceRoutes);
-app.use('/api/assigntasks', assignTaskRoutes);
+app.use('/v1/api/company', companyRoute);
+app.use('/v1/api/employee', employeeRoute);
+app.use('/v1/api/leave', leaveRoutes);
+app.use('/v1/api/dailytask', DailyTaskRoutes);
+app.use('/v1/api/salary', salaryRoutes);
+app.use('/v1/api/checkincheckout', checkincheckoutRoutes);
+app.use('/v1/api/attendance', attendanceRoutes);
+app.use('/v1/api/assigntasks', assignTaskRoutes);
+app.use('/v1/punch', punchRoutes);
 
 
 // Swagger API Docs

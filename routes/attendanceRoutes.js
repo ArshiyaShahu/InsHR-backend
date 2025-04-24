@@ -4,57 +4,49 @@ const CheckInCheckOut = require('../models/checkincheckout');
 
 /**
  * @swagger
- * tags:
- *   name: Attendance
- *   description: Attendance management
- */
-
-/**
- * @swagger
- * /api/attendance:
+ * /v1/api/attendance:
  *   get:
- *     summary: Get only date, check-in time, and check-out time from Check-In/Check-Out data
+ *     summary: Get attendance data by month (formatted date)
  *     tags: [Attendance]
+ *     parameters:
+ *       - in: query
+ *         name: month
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Month in format YYYY-MM (e.g., 2025-04)
  *     responses:
  *       200:
- *         description: Successfully fetched attendance data
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   date:
- *                     type: string
- *                   checkIn:
- *                     type: string
- *                   checkOut:
- *                     type: string
- *       500:
- *         description: Error fetching attendance data
+ *         description: Formatted attendance data
  */
 
 router.get('/', async (req, res) => {
   try {
-    const data = await CheckInCheckOut.find({}, { checkin_time: 1, checkout_time: 1, _id: 0 });
+    const { month } = req.query;
 
-    const formattedData = data.map(entry => {
-      const checkIn = entry.checkin_time;
-      const checkOut = entry.checkout_time || 'N/A';
+    if (!month || !/^\d{4}-\d{2}$/.test(month)) {
+      return res.status(400).json({ message: 'Month is required in format YYYY-MM (e.g., 2025-04)' });
+    }
 
-      // Format today's date (as no date is stored)
-      const today = new Date();
-      const formattedDate = today.toLocaleDateString('en-US', {
+    const startDate = new Date(`${month}-01T00:00:00Z`);
+    const endDate = new Date(startDate);
+    endDate.setMonth(endDate.getMonth() + 1);
+
+    const records = await CheckInCheckOut.find({
+      date: { $gte: startDate, $lt: endDate }
+    }).sort({ date: 1 });
+
+    const formattedData = records.map(entry => {
+      const formattedDate = new Date(entry.date).toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
         day: 'numeric'
       });
 
       return {
-        date: formattedDate,
-        checkIn: checkIn,
-        checkOut: checkOut
+        date: formattedDate, 
+        checkIn: entry.checkin_time || 'N/A',
+        checkOut: entry.checkout_time || 'N/A'
       };
     });
 
@@ -63,6 +55,5 @@ router.get('/', async (req, res) => {
     res.status(500).json({ message: 'Error fetching attendance data', error: err });
   }
 });
-
 
 module.exports = router;

@@ -6,7 +6,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/salary:
+ * /v1/api/salary:
  *   post:
  *     summary: Create Salary Request
  *     tags: [Salary Management]
@@ -78,7 +78,7 @@ router.post('/', async (req, res) => {
 
 /**
  * @swagger
- * /api/salary:
+ * /v1/api/salary:
  *   get:
  *     summary: Get All Salary Requests
  *     tags: [Salary Management]

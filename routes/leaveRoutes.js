@@ -6,7 +6,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/leave:
+ * /v1/api/leave:
  *   post:
  *     summary: Create Leave Request
  *     tags: [Leave]
@@ -65,7 +65,7 @@ router.post('/', async (req, res) => {
 
 /**
  * @swagger
- * /api/leave:
+ * /v1/api/leave:
  *   get:
  *     summary: Get All Leave Requests
  *     tags: [Leave]

@@ -4,7 +4,7 @@ const Company = require('../models/company');
 
 /**
  * @swagger
- * /api/company:
+ * /v1/api/company:
  *   post:
  *     summary: Create new company
  *     tags: [Company]

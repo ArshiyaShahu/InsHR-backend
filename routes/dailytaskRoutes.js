@@ -6,7 +6,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/dailytask:
+ * /v1/api/dailytask:
  *   post:
  *     summary: Create Daily Task
  *     tags: [DailyTask]
@@ -58,7 +58,7 @@ router.post('/', async (req, res) => {
 
 /**
  * @swagger
- * /api/dailytask:
+ * /V1/api/dailytask:
  *   get:
  *     summary: Get All Daily Tasks
  *     tags: [DailyTask]

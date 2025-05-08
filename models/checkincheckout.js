@@ -7,7 +7,7 @@ const checkincheckoutschema = new Schema({
         required: true
     },
     employee_id: {
-        type: Number,
+        type: String,
         required: true
     },
     employee_name: {
@@ -53,6 +53,10 @@ const checkincheckoutschema = new Schema({
     },
     Production_hours: {
         type: String
+    },
+    break_time: { 
+        type: String,
+        default: "Not Available"
     }
 }, {
     timestamps: true

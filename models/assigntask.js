@@ -6,7 +6,7 @@ const AssignTaskSchema = new mongoose.Schema({
     required: true
   },
   employee_id: {
-    type: Number,
+    type: String,
     required: true
   },
   employee_name: {

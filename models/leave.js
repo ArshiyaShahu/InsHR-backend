@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const leaveSchema = new mongoose.Schema({
     employee_id: {
-        type: Number,
+        type: String,
         required: true
     },
     company_id: {

@@ -118,45 +118,58 @@ const router = express.Router();
 // Employee Create API
 router.post("/", async (req, res) => {
     try {
-        const {
-            company_id, employee_id, email, password,
-            ...rest
-        } = req.body;
-
-        const company = await mongoose.connection.db.collection('companies').findOne({ company_id });
-
-        if (!company) {
-            return res.status(400).json({ message: "Invalid Company ID" });
-        }
-
-        const existingEmployee = await Employee.findOne({
-            $or: [{ email }, { employee_id }]
-        });
-
-        if (existingEmployee) {
-            return res.status(400).json({ message: "Employee Already Exists" });
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        const newEmployee = new Employee({
-            company_id,
-            employee_id,
-            email,
-            password: hashedPassword,
-            ...rest
-        });
-
-        await newEmployee.save();
-
-        res.status(201).json({
-            message: "Employee Created Successfully",
-            data: newEmployee,
-        });
-
+      const {
+        company_id,
+        employee_id,
+        contact_no,
+        email,
+        password,
+        ...rest
+      } = req.body;
+  
+      // 1. Check if employee exists in adminemps collection
+      const adminMatch = await mongoose.connection.db.collection('adminemps').findOne({
+        $or: [
+          { email: email.trim().toLowerCase() },
+          { emp_id: employee_id },
+          { phone_number: contact_no }
+        ]
+      });
+  
+      if (!adminMatch) {
+        return res.status(400).json({ message: "Employee data not found in Admin Records" });
+      }
+  
+      // 2. Check if already exists in employees collection
+      const existingEmployee = await Employee.findOne({
+        $or: [{ email }, { employee_id }]
+      });
+  
+      if (existingEmployee) {
+        return res.status(400).json({ message: "Employee Already Exists" });
+      }
+  
+      // 3. Hash password and save
+      const hashedPassword = await bcrypt.hash(password, 10);
+  
+      const newEmployee = new Employee({
+        company_id,
+        employee_id,
+        email,
+        password: hashedPassword,
+        contact_no,
+        ...rest
+      });
+  
+      await newEmployee.save();
+  
+      res.status(201).json({
+        message: "Employee Created Successfully",
+        data: newEmployee
+      });
+  
     } catch (error) {
-        res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message });
     }
-});
-
-module.exports = router;
+  });
+  module.exports = router;

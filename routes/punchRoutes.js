@@ -10,7 +10,6 @@ const CheckInCheckOut = require('../models/checkincheckout');
  *   name: Punch
  *   description: Punch Page & History APIs
  */
-
 // ===================== GET Punch Page =====================
 /**
  * @swagger
@@ -39,6 +38,7 @@ router.get('/today', async (req, res) => {
         const end = new Date();
         end.setHours(23, 59, 59, 999);
 
+        // Fetch today's record
         const record = await CheckInCheckOut.findOne({
             employee_id: employeeId,
             date: { $gte: start, $lte: end },
@@ -48,20 +48,52 @@ router.get('/today', async (req, res) => {
             return res.status(404).json({ message: 'No record found for today' });
         }
 
-        const totalDays = await CheckInCheckOut.countDocuments({ employee_id: employeeId });
+        // Convert break_in and break_out to 24hr Date objects
+        let breakMessage = "Not Available";
+
+        const convertTo24HrFormat = (timeStr) => {
+            const [time, modifier] = timeStr.split(" ");
+            let [hours, minutes] = time.split(":").map(Number);
+            if (modifier === "PM" && hours !== 12) hours += 12;
+            if (modifier === "AM" && hours === 12) hours = 0;
+            const date = new Date();
+            date.setHours(hours, minutes, 0, 0);
+            return date;
+        };
+
+        if (record.break_in && record.break_out) {
+            const breakIn = convertTo24HrFormat(record.break_in);
+            const breakOut = convertTo24HrFormat(record.break_out);
+        
+            if (!isNaN(breakIn.getTime()) && !isNaN(breakOut.getTime())) {
+                const totalBreakTime = breakOut - breakIn;
+                const minutes = Math.floor(totalBreakTime / 60000);
+                const hours = Math.floor(minutes / 60);
+                const remainingMinutes = minutes % 60;
+        
+                // Format like "00:30 min"
+                const pad = (n) => n.toString().padStart(2, '0');
+                breakMessage = `${pad(hours)}:${pad(remainingMinutes)} min`;
+            } else {
+                breakMessage = "Invalid break times";
+            }
+        }
+        
+        const totalDays = await CheckInCheckOut.countDocuments({
+            checkin_time: { $ne: null },
+            checkout_time: { $ne: null }
+        });
 
         res.json({
             check_in: record.checkin_time || "Not Available",
             check_out: record.checkout_time || "Not Available",
-            break_time: record.break_in || "Not Available", 
+            break_time: breakMessage,
             total_days: totalDays,
         });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error });
     }
 });
-
-
 
 // ===================== GET Punch History =====================
 /**

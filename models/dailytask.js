@@ -6,7 +6,7 @@ const DailyTaskSchema = new mongoose.Schema({
         required: true
     },
     employee_id: {
-        type: Number,
+        type: String,
         required: true
     },
     task_type: {

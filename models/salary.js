@@ -7,7 +7,7 @@ const salarySchema = new mongoose.Schema({
         trim: true
     },
     employee_id: {
-        type: Number,
+        type: String,
         required: true,
     },
     employee_payment_mode: {

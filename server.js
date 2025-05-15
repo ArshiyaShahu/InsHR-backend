@@ -11,7 +11,7 @@ const checkincheckoutRoutes = require('./routes/checkincheckoutRoutes');
 const attendanceRoutes = require('./routes/attendanceRoutes');
 const assignTaskRoutes = require('./routes/assigntasksRoutes');
 const punchRoutes = require('./routes/punchRoutes');
-const profileRoutes = require('./routes/profileRoutes'); 
+const profileRoutes = require('./routes/profileRoutes');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./swagger');
 
@@ -32,7 +32,8 @@ app.use('/v1/api/checkincheckout', checkincheckoutRoutes);
 app.use('/v1/api/attendance', attendanceRoutes);
 app.use('/v1/api/assigntasks', assignTaskRoutes);
 app.use('/v1/punch', punchRoutes);
-app.use('/v1/api', profileRoutes);
+app.use('/v1/profile', profileRoutes);
+
 // Swagger API Docs
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
